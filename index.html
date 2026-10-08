@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#071326">
+	<meta name="description" content="A little midnight magic, made for your birthday.">
+	<title>A little more magic · Happy birthday</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+	<style>
+		:root {
+			color-scheme: dark;
+			--night: #071326;
+			--deep: #0b1b35;
+			--blue: #183b60;
+			--pink: #ff86b7;
+			--pink-hot: #ff5fa5;
+			--cyan: #8cecff;
+			--mist: #d8eaf7;
+			--serif: "Playfair Display", Georgia, serif;
+			--sans: "DM Sans", sans-serif;
+		}
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; background: var(--night); }
+		body { margin: 0; color: var(--mist); background: var(--night); font-family: var(--sans); overflow-x: hidden; }
+		body::before { content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none; background: radial-gradient(ellipse at 48% 10%, #183252 0%, transparent 47%), linear-gradient(180deg, #071326 0%, #0a1a32 39%, #102747 70%, #071326 100%); }
+		button { font: inherit; }
+		a { color: inherit; }
+		.skip-link { position: fixed; left: 12px; top: 12px; z-index: 100; padding: 10px 14px; transform: translateY(-160%); background: #fff; color: #071326; }
+		.skip-link:focus { transform: translateY(0); }
+		.butterfly-field { position: fixed; inset: 0; z-index: 8; overflow: hidden; pointer-events: none; }
+		.butterfly { position: absolute; width: 25px; height: 21px; color: var(--cyan); opacity: .62; filter: drop-shadow(0 0 8px currentColor); will-change: transform; }
+		.butterfly svg { display: block; width: 100%; height: 100%; overflow: visible; }
+		.butterfly path { fill: currentColor; stroke: rgba(231,251,255,.78); stroke-width: .55; transform-box: fill-box; transform-origin: center; animation: wingbeat .38s ease-in-out infinite alternate; }
+		.butterfly path:last-child { animation-delay: -.38s; }
+		@keyframes wingbeat { from { transform: scaleX(.42) rotateY(12deg); } to { transform: scaleX(1) rotateY(-10deg); } }
+		.site-header { position: absolute; top: 0; left: 0; width: 100%; padding: 25px clamp(20px, 5vw, 72px); display: flex; align-items: center; justify-content: space-between; z-index: 10; color: rgba(230,242,255,.74); font-size: 11px; letter-spacing: 0; text-transform: uppercase; }
+		.wordmark { color: #e9f7ff; text-decoration: none; font-weight: 700; letter-spacing: 0; }
+		.header-note { display: flex; align-items: center; gap: 9px; }
+		.header-note::before { content: ""; width: 5px; height: 5px; background: var(--pink); border-radius: 50%; box-shadow: 0 0 12px var(--pink); }
+		.hero { position: relative; min-height: 100svh; display: grid; place-items: center; isolation: isolate; overflow: hidden; background: radial-gradient(ellipse at 50% 48%, rgba(41,86,126,.42), transparent 48%), linear-gradient(180deg, #061123 0%, #0a1a32 72%, #102643 100%); }
+		.hero::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .3; pointer-events: none; background-image: radial-gradient(1px 1px at 11% 28%, white 50%, transparent 100%), radial-gradient(1px 1px at 72% 19%, white 50%, transparent 100%), radial-gradient(1.5px 1.5px at 83% 64%, #a9e8ff 50%, transparent 100%), radial-gradient(1px 1px at 26% 76%, white 50%, transparent 100%), radial-gradient(1px 1px at 48% 13%, white 50%, transparent 100%), radial-gradient(1px 1px at 91% 34%, white 50%, transparent 100%); background-size: 420px 370px; }
+		.hero-copy { position: relative; z-index: 2; text-align: center; padding: 90px 24px 80px; pointer-events: none; }
+		.eyebrow { color: var(--cyan); font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: uppercase; }
+		h1, h2, p { margin-top: 0; }
+		.hero h1 { margin: 19px 0 14px; color: #fff5fb; font: 500 88px/.98 var(--serif); text-shadow: 0 0 35px rgba(255,134,183,.42); }
+		.hero h1 em { color: var(--pink); font-weight: 500; }
+		.hero-copy p { margin: 0; color: rgba(222,239,252,.73); font-size: 14px; letter-spacing: 0; }
+		.scoop-hero { position: absolute; z-index: 1; top: 50%; left: 50%; width: 155px; height: 194px; transform: translate(-50%,-39%); filter: drop-shadow(0 0 30px rgba(255,128,184,.35)); pointer-events: none; }
+		.scoop-hero .orb { position: absolute; top: 0; left: 22px; width: 112px; height: 106px; border-radius: 50% 48% 45% 50%; background: radial-gradient(circle at 34% 26%, #fff2f9 0%, #ffc5df 20%, #ff82b7 55%, #c74180 100%); box-shadow: inset -12px -13px 22px rgba(100,22,71,.4), inset 7px 5px 15px rgba(255,255,255,.7), 0 0 24px rgba(255,115,177,.62); }
+		.scoop-hero .orb::before, .scoop-hero .orb::after { content: ""; position: absolute; top: 51px; width: 35px; height: 33px; background: #ed6da4; border-radius: 0 0 50% 50%; }
+		.scoop-hero .orb::before { left: 2px; transform: rotate(25deg); }.scoop-hero .orb::after { right: 1px; transform: rotate(-22deg); }
+		.scoop-hero .cone { position: absolute; top: 87px; left: 42px; width: 73px; height: 104px; clip-path: polygon(0 0,100% 0,50% 100%); background: repeating-linear-gradient(43deg, transparent 0 11px, rgba(109,55,44,.42) 12px 14px), repeating-linear-gradient(-43deg, #f6c68e 0 10px, #e8a66d 11px 13px); filter: drop-shadow(0 8px 9px rgba(0,0,0,.34)); }
+		.scoop-hero .drip { position:absolute; top:83px; left:41px; width:75px; height:22px; border-radius:50%; background:linear-gradient(90deg,#ff9bc5,#ffe0ee 50%,#fa82b8); }
+		.hero-canvas { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; pointer-events: none; }
+		.hero-hint { position: absolute; bottom: 34px; left: 50%; z-index: 4; transform: translateX(-50%); color: rgba(221,237,250,.58); font-size: 10px; letter-spacing: 0; text-transform: uppercase; white-space: nowrap; }
+		.hero-hint span { display: block; margin: 0 auto 10px; width: 1px; height: 25px; background: linear-gradient(var(--pink), transparent); }
+		.story { position: relative; padding: 120px 8vw 140px; overflow: hidden; background: linear-gradient(180deg, #102747 0%, #10294a 45%, #0c1e39 100%); }
+		.story::before { content:""; position:absolute; width: 580px; height:580px; right:-240px; top:10%; border-radius:50%; background:radial-gradient(circle,rgba(255,110,172,.09),transparent 68%); pointer-events:none; }
+		.story-intro { max-width: 600px; margin: 0 auto 85px; text-align: center; }
+		.story-intro h2 { margin: 15px 0 0; font: 500 56px/1.12 var(--serif); color:#eff8ff; }
+		.story-intro h2 em { color: var(--pink); }
+		.story-track { position: relative; max-width: 900px; margin: 0 auto; }
+		.story-track::before { content:""; position:absolute; top:0; bottom:0; left:50%; width:1px; background:linear-gradient(transparent,rgba(140,236,255,.38) 10%,rgba(255,134,183,.45) 90%,transparent); }
+		.story-row { position:relative; display:flex; width:50%; min-height:225px; align-items:center; padding:22px 56px 22px 0; }
+		.story-row:nth-child(even) { margin-left:50%; padding:22px 0 22px 56px; }
+		.story-row::after { content:""; position:absolute; top:50%; right:-5px; width:9px; height:9px; border:1px solid var(--cyan); border-radius:50%; background:var(--deep); box-shadow:0 0 15px var(--cyan); }
+		.story-row:nth-child(even)::after { right:auto; left:-4px; border-color:var(--pink); box-shadow:0 0 15px var(--pink); }
+		.quote { width:100%; padding:26px 28px; border:1px solid rgba(202,230,255,.16); border-radius:4px; background:linear-gradient(135deg,rgba(211,236,255,.09),rgba(211,236,255,.025)); box-shadow:0 18px 50px rgba(0,0,0,.13); backdrop-filter:blur(12px); }
+		.quote .number { display:block; margin-bottom:13px; color:var(--cyan); font-size:9px; letter-spacing:0; text-transform:uppercase; }
+		.quote p { margin:0; color:#edf5fc; font:italic 500 23px/1.45 var(--serif); }
+		.story-decoration { position:absolute; z-index:0; font-size:34px; filter:drop-shadow(0 0 12px rgba(255,134,183,.55)); opacity:.5; pointer-events:none; will-change:transform; }
+		.decoration-one { top:25%; left:8%; }.decoration-two { top:60%; right:8%; font-size:28px; }.decoration-three { bottom:8%; left:15%; font-size:24px; }
+		.story-icecream { position:absolute; z-index:0; width:30px; height:46px; opacity:.58; filter:drop-shadow(0 0 9px rgba(255,134,183,.55)); pointer-events:none; will-change:transform; }
+		.story-icecream::before { content:""; position:absolute; left:7px; top:17px; width:17px; height:28px; clip-path:polygon(0 0,100% 0,50% 100%); background:repeating-linear-gradient(43deg,#f4ca96 0 6px,#bc805f 7px 8px); }
+		.story-icecream::after { content:""; position:absolute; left:2px; top:0; width:27px; height:25px; border-radius:50% 50% 45% 45%; background:radial-gradient(circle at 33% 28%,#fff0f7,#ffa5ce 48%,#e85299); box-shadow:inset -4px -4px 8px rgba(111,22,65,.3),0 0 12px rgba(255,117,177,.44); }
+		.icecream-one { top:43%; right:22%; }.icecream-two { bottom:20%; right:10%; transform:scale(.78); }
+		.game-section { position:relative; padding:105px 22px 115px; text-align:center; overflow:hidden; background:radial-gradient(ellipse at 50% 100%,rgba(31,82,123,.34),transparent 55%),#0b1b34; }
+		.game-section h2 { margin:13px 0 12px; color:#f5f8ff; font:500 56px/1.1 var(--serif); }
+		.game-section .intro { color:rgba(221,237,250,.7); font-size:13px; }
+		.game-shell { position:relative; width:min(760px,100%); height:390px; margin:38px auto 0; overflow:hidden; border:1px solid rgba(140,236,255,.23); border-radius:4px; background:radial-gradient(ellipse at 50% 0%,rgba(34,91,137,.5),transparent 66%),linear-gradient(180deg,#102744,#09172c); box-shadow:0 24px 80px rgba(0,0,0,.28),inset 0 0 40px rgba(140,236,255,.035); touch-action:none; }
+		.game-canvas { display:block; width:100%; height:100%; touch-action:none; }
+		.game-hud { position:absolute; top:16px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center; color:rgba(221,237,250,.72); font-size:10px; letter-spacing:0; text-transform:uppercase; pointer-events:none; }
+		.game-count { color:var(--pink); font-size:12px; font-weight:700; }
+		.game-overlay { position:absolute; inset:0; z-index:2; display:grid; place-items:center; background:rgba(5,14,28,.52); backdrop-filter:blur(5px); transition:opacity .4s,visibility .4s; }
+		.game-overlay.is-hidden { opacity:0; visibility:hidden; }
+		.overlay-content { padding:24px; }
+		.overlay-content p { margin:0 0 17px; color:#eff7ff; font:italic 22px var(--serif); }
+		.action-button { min-height:46px; padding:0 23px; border:1px solid rgba(255,158,200,.78); border-radius:2px; background:linear-gradient(115deg,rgba(255,95,165,.21),rgba(140,236,255,.11)); box-shadow:0 0 25px rgba(255,95,165,.14),inset 0 0 18px rgba(255,255,255,.035); color:#fff5fb; cursor:pointer; font-size:10px; font-weight:700; letter-spacing:0; text-transform:uppercase; transition:transform .2s,box-shadow .2s,background .2s; }
+		.action-button:hover { transform:translateY(-2px); background:linear-gradient(115deg,rgba(255,95,165,.34),rgba(140,236,255,.18)); box-shadow:0 0 32px rgba(255,95,165,.28); }
+		.action-button:focus-visible { outline:2px solid var(--cyan); outline-offset:4px; }
+		.game-progress { width:min(240px,75%); height:2px; margin:19px auto 0; background:rgba(220,240,255,.16); }
+		.game-progress span { display:block; width:0; height:100%; background:linear-gradient(90deg,var(--pink),var(--cyan)); box-shadow:0 0 10px var(--pink); transition:width .3s; }
+		.finale { position:relative; min-height:100svh; display:grid; place-items:center; padding:100px 24px; overflow:hidden; isolation:isolate; text-align:center; background:radial-gradient(ellipse at 50% 55%,#102642 0%,#071326 68%); }
+		.finale::before { content:""; position:absolute; inset:0; z-index:-1; opacity:.45; background-image:radial-gradient(1px 1px at 15% 25%,#dff8ff 50%,transparent),radial-gradient(1px 1px at 77% 31%,#fff 50%,transparent),radial-gradient(1px 1px at 63% 76%,#c2efff 50%,transparent),radial-gradient(1px 1px at 32% 67%,#fff 50%,transparent); background-size:390px 340px; }
+		.finale-canvas { position:absolute; inset:0; z-index:0; width:100%; height:100%; pointer-events:none; }
+		.finale-content { position:relative; z-index:2; max-width:750px; transition:opacity .7s,transform .7s; }
+		.finale.is-locked .finale-content { opacity:.28; transform:scale(.98); filter:blur(2px); pointer-events:none; }
+		.finale-lock { position:absolute; z-index:4; inset:0; display:grid; place-items:center; padding:25px; background:rgba(4,12,25,.24); color:#f0f7ff; font:italic 22px var(--serif); transition:opacity .5s,visibility .5s; }
+		.finale-lock.is-hidden { opacity:0; visibility:hidden; }
+		.finale h2 { min-height:2.2em; margin:17px 0 13px; color:#fff5fb; font:500 84px/1.05 var(--serif); text-shadow:0 0 36px rgba(255,134,183,.26); }
+		.finale h2 em { color:var(--pink); }
+		.finale-message { min-height:28px; margin:0 0 32px; color:rgba(225,239,252,.75); font-size:14px; letter-spacing:0; }
+		.wish-button { min-width:172px; min-height:52px; border-color:rgba(140,236,255,.72); background:linear-gradient(110deg,rgba(255,95,165,.26),rgba(140,236,255,.17)); box-shadow:0 0 33px rgba(140,236,255,.13),0 0 28px rgba(255,95,165,.17); }
+		.wish-button:disabled { opacity:.42; cursor:default; transform:none; }
+		.footer { position:absolute; bottom:24px; left:0; width:100%; color:rgba(211,232,248,.4); font-size:9px; letter-spacing:0; text-transform:uppercase; }
+		@media (max-width:650px) {
+			.site-header { padding:20px; }.header-note { font-size:9px; }
+			.hero-copy { padding-top:100px; }.hero h1 { font-size:48px; }.story-intro h2 { font-size:36px; }.quote p { font-size:18px; }.game-section h2 { font-size:40px; }.finale h2 { font-size:44px; }.hero-copy p { max-width:280px; margin:0 auto; line-height:1.7; }
+			.scoop-hero { transform:translate(-50%,-26%) scale(.86); }
+			.story { padding:90px 22px 100px; }.story-intro { margin-bottom:55px; }
+			.story-track::before { left:8px; }.story-row,.story-row:nth-child(even) { width:100%; min-height:175px; margin:0; padding:18px 0 18px 34px; }
+			.story-row::after,.story-row:nth-child(even)::after { right:auto; left:4px; }
+			.quote { padding:22px 20px; }.story-decoration { opacity:.25; }
+			.game-section { padding:85px 16px 90px; }.game-shell { height:min(390px,112vw); min-height:300px; }
+			.finale { min-height:90svh; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			*,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<a class="skip-link" href="#story">Skip to the birthday story</a>
+	<div class="butterfly-field" aria-hidden="true"></div>
+	<header class="site-header">
+		<a class="wordmark" href="#top">M. / 08</a>
+		<span class="header-note">A little midnight magic</span>
+	</header>
+
+	<main>
+		<section class="hero" id="top" aria-labelledby="hero-title">
+			<div class="hero-copy">
+				<span class="eyebrow">For your next trip around the sun</span>
+				<h1 id="hero-title">A little more<br><em>magic.</em></h1>
+				<p>Move gently through the night and see what’s waiting.</p>
+			</div>
+			<div class="scoop-hero" aria-hidden="true"><span class="orb"></span><span class="drip"></span><span class="cone"></span></div>
+			<canvas class="hero-canvas" aria-hidden="true"></canvas>
+			<div class="hero-hint"><span></span>Follow the feeling</div>
+		</section>
+
+		<section class="story" id="story" aria-labelledby="story-title">
+			<span class="story-decoration decoration-one" aria-hidden="true">✿</span>
+			<span class="story-decoration decoration-two" aria-hidden="true">✧</span>
+			<span class="story-decoration decoration-three" aria-hidden="true">❀</span>
+			<span class="story-decoration story-icecream icecream-one" aria-hidden="true"></span>
+			<span class="story-decoration story-icecream icecream-two" aria-hidden="true"></span>
+			<div class="story-intro">
+				<span class="eyebrow">A small note from the universe</span>
+				<h2 id="story-title">Some nights are made<br>to <em>remember.</em></h2>
+			</div>
+			<div class="story-track">
+				<article class="story-row"><div class="quote"><span class="number">01 / the beginning</span><p>“Somewhere between the first star and the moon, the night learned how to glow.”</p></div></article>
+				<article class="story-row"><div class="quote"><span class="number">02 / your kind of light</span><p>“You make ordinary days feel like the sky is keeping a secret just for us.”</p></div></article>
+				<article class="story-row"><div class="quote"><span class="number">03 / another orbit</span><p>“May this next year be soft where it can be, and full of beautiful surprises.”</p></div></article>
+				<article class="story-row"><div class="quote"><span class="number">04 / the sweetest part</span><p>“And when the stars come out, remember: the world is brighter with you in it.”</p></div></article>
+			</div>
+		</section>
+
+		<section class="game-section" id="game" aria-labelledby="game-title">
+			<span class="eyebrow">A tiny birthday challenge</span>
+			<h2 id="game-title">Sweet catch</h2>
+			<p class="intro">Guide your cone. Catch five little wishes.</p>
+			<div class="game-shell">
+				<canvas class="game-canvas" aria-label="Catch the falling pink ice cream scoops using your mouse or touch. Five catches unlock the birthday wish." role="img"></canvas>
+				<div class="game-hud"><span>Move to catch</span><span class="game-count" aria-live="polite">0 / 5</span></div>
+				<div class="game-overlay">
+					<div class="overlay-content"><p>Ready for something sweet?</p><button type="button" class="action-button start-game">Begin catching</button><div class="game-progress" aria-hidden="true"><span></span></div></div>
+				</div>
+			</div>
+		</section>
+
+		<section class="finale is-locked" id="finale" aria-labelledby="finale-title">
+			<canvas class="finale-canvas" aria-hidden="true"></canvas>
+			<div class="finale-lock">Five wishes are waiting to be caught.</div>
+			<div class="finale-content">
+				<span class="eyebrow">For the one who makes it brighter</span>
+				<h2 id="finale-title" aria-label="Happy birthday, you."><span class="typed-title"></span><span class="typing-cursor" aria-hidden="true">|</span></h2>
+				<p class="finale-message">May every good thing find its way to you.</p>
+				<button type="button" class="action-button wish-button" disabled>Make a Wish</button>
+			</div>
+			<div class="footer">Made of moonlight &amp; birthday wishes</div>
+		</section>
+	</main>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+		(() => {
+			"use strict";
+			const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+			const random = (min, max) => Math.random() * (max - min) + min;
+
+			// A small fixed population keeps the site-wide flutter independent of game state.
+			const butterflyField = document.querySelector(".butterfly-field");
+			const butterflies = [];
+			const butterflySvg = '<svg viewBox="0 0 32 24" focusable="false"><path d="M16 12C12 3 3 1 3 7c0 4 6 7 12 6-6 2-9 7-5 9 4 2 7-4 6-10Z"/><path d="M16 12c4-9 13-11 13-5 0 4-6 7-12 6 6 2 9 7 5 9-4 2-7-4-6-10Z"/><path d="M16 8v11" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
+			for (let i = 0; i < 8; i += 1) {
+				const element = document.createElement("span");
+				element.className = "butterfly";
+				element.innerHTML = butterflySvg;
+				butterflyField.appendChild(element);
+				const butterfly = { element, x: random(0, innerWidth), y: random(0, innerHeight), phase: random(0, Math.PI * 2), speed: random(5, 15), drift: random(9, 24), scale: random(.65, 1.1), hue: random(-8, 15) };
+				element.style.transform = `translate3d(${butterfly.x}px,${butterfly.y}px,0) scale(${butterfly.scale})`;
+				butterflies.push(butterfly);
+			}
+			let butterflyTime = 0;
+			function animateButterflies(time) {
+				const delta = Math.min((time - butterflyTime) / 1000 || 0, .04);
+				butterflyTime = time;
+				if (!reducedMotion) butterflies.forEach((butterfly) => {
+					butterfly.phase += delta * .65;
+					butterfly.x += Math.sin(butterfly.phase * .42) * delta * butterfly.drift;
+					butterfly.y -= delta * butterfly.speed;
+					if (butterfly.y < -35) { butterfly.y = innerHeight + 25; butterfly.x = random(0, innerWidth); }
+					if (butterfly.x < -30) butterfly.x = innerWidth + 25;
+					if (butterfly.x > innerWidth + 30) butterfly.x = -25;
+					const wobbleX = Math.sin(butterfly.phase * 2.1) * 13;
+					const wobbleY = Math.sin(butterfly.phase) * 9;
+					butterfly.element.style.transform = `translate3d(${butterfly.x + wobbleX}px,${butterfly.y + wobbleY}px,0) scale(${butterfly.scale}) rotate(${Math.sin(butterfly.phase) * 12}deg)`;
+					butterfly.element.style.filter = `hue-rotate(${butterfly.hue}deg) drop-shadow(0 0 8px currentColor)`;
+				});
+				if (!reducedMotion) requestAnimationFrame(animateButterflies);
+			}
+			requestAnimationFrame(animateButterflies);
+			window.addEventListener("resize", () => butterflies.forEach((b) => { b.x = Math.min(b.x, innerWidth); }));
+
+			if (window.gsap && window.ScrollTrigger) {
+				gsap.registerPlugin(ScrollTrigger);
+				gsap.utils.toArray(".story-row").forEach((row, index) => {
+					gsap.fromTo(row, { autoAlpha: 0, x: index % 2 ? 42 : -42, y: 18 }, {
+						autoAlpha: 1, x: 0, y: 0, duration: .85, ease: "power2.out",
+						scrollTrigger: { trigger: row, start: "top 82%", once: true }
+					});
+				});
+				gsap.utils.toArray(".story-decoration").forEach((decoration, index) => {
+					gsap.to(decoration, { y: index % 2 ? -100 : 85, rotation: index % 2 ? 24 : -18, ease: "none", scrollTrigger: { trigger: ".story", start: "top bottom", end: "bottom top", scrub: 1 } });
+				});
+				gsap.from(".story-intro", { autoAlpha: 0, y: 28, duration: 1, scrollTrigger: { trigger: ".story-intro", start: "top 82%", once: true } });
+			} else {
+				document.querySelectorAll(".story-row").forEach((row) => row.style.opacity = "1");
+			}
+
+			// Hero petals use a strict cap and a single DPR-limited canvas loop.
+			const heroCanvas = document.querySelector(".hero-canvas");
+			const heroCtx = heroCanvas.getContext("2d", { alpha: true });
+			const hero = { width: 0, height: 0, dpr: 1, petals: [], pointer: { x: -1000, y: -1000, px: -1000, py: -1000, active: false, until: 0 } };
+			const HERO_LIMIT = 48;
+			function resizeHero() {
+				const box = heroCanvas.getBoundingClientRect();
+				hero.dpr = Math.min(devicePixelRatio || 1, 1.5);
+				hero.width = box.width; hero.height = box.height;
+				heroCanvas.width = Math.round(box.width * hero.dpr); heroCanvas.height = Math.round(box.height * hero.dpr);
+				heroCtx.setTransform(hero.dpr, 0, 0, hero.dpr, 0, 0);
+			}
+			function seedPetal(petal, fromTop = false) {
+				petal.x = random(0, hero.width); petal.y = fromTop ? random(-hero.height, 0) : random(-30, hero.height);
+				petal.vx = random(-7, 7); petal.vy = random(12, 27); petal.radius = random(1.4, 3.3);
+				petal.angle = random(0, Math.PI * 2); petal.spin = random(-1.1, 1.1); petal.sway = random(4, 13); petal.phase = random(0, 7);
+			}
+			function setPointer(event) {
+				const rect = heroCanvas.getBoundingClientRect();
+				hero.pointer.px = hero.pointer.x; hero.pointer.py = hero.pointer.y;
+				hero.pointer.x = event.clientX - rect.left; hero.pointer.y = event.clientY - rect.top;
+				hero.pointer.active = true; hero.pointer.until = performance.now() + 220;
+			}
+			window.addEventListener("pointermove", setPointer, { passive: true });
+			window.addEventListener("pointerdown", setPointer, { passive: true });
+			window.addEventListener("pointerup", () => { hero.pointer.active = false; }, { passive: true });
+			function drawPetal(petal) {
+				heroCtx.save(); heroCtx.translate(petal.x, petal.y); heroCtx.rotate(petal.angle);
+				heroCtx.beginPath(); heroCtx.ellipse(0, 0, petal.radius * 1.55, petal.radius * .8, 0, 0, Math.PI * 2);
+				heroCtx.fillStyle = "rgba(255,143,190,.78)"; heroCtx.shadowColor = "#ff71ac"; heroCtx.shadowBlur = 10; heroCtx.fill(); heroCtx.restore();
+			}
+			let heroLast = 0;
+			let heroRaf = 0;
+			let heroVisible = false;
+			function animateHero(time) {
+				heroRaf = 0;
+				if (!heroVisible) return;
+				const dt = Math.min((time - heroLast) / 1000 || .016, .033); heroLast = time;
+				heroCtx.clearRect(0, 0, hero.width, hero.height);
+				const pointer = hero.pointer;
+				const windX = pointer.active && time < pointer.until ? pointer.x - pointer.px : 0;
+				for (let i = 0; i < hero.petals.length; i += 1) {
+					const petal = hero.petals[i];
+					petal.phase += dt;
+					petal.x += (petal.vx + Math.sin(petal.phase * 1.4) * petal.sway + windX * .035) * dt;
+					petal.y += petal.vy * dt;
+					petal.angle += petal.spin * dt;
+					if (pointer.active && time < pointer.until) {
+						const dx = petal.x - pointer.x, dy = petal.y - pointer.y;
+						const distanceSq = dx * dx + dy * dy;
+						if (distanceSq < 10800 && distanceSq > 1) {
+							const force = (1 - Math.sqrt(distanceSq) / 104) * 95 * dt;
+							petal.vx += (dx / Math.sqrt(distanceSq)) * force + Math.sign(windX || 1) * Math.abs(windX) * .007;
+							petal.vy -= Math.abs(windX) * .006;
+						}
+					}
+					petal.vx *= .992; petal.vy = Math.max(7, Math.min(45, petal.vy));
+					if (petal.y > hero.height + 14 || petal.x < -25 || petal.x > hero.width + 25) seedPetal(petal, true);
+					drawPetal(petal);
+				}
+				if (heroVisible && !reducedMotion) heroRaf = requestAnimationFrame(animateHero);
+			}
+			resizeHero();
+			for (let i = 0; i < HERO_LIMIT; i += 1) { const petal = {}; seedPetal(petal); hero.petals.push(petal); }
+			if ("IntersectionObserver" in window) {
+				const heroObserver = new IntersectionObserver(([entry]) => {
+					heroVisible = entry.isIntersecting;
+					if (heroVisible && !heroRaf) heroRaf = requestAnimationFrame(animateHero);
+				});
+				heroObserver.observe(heroCanvas);
+			} else {
+				heroVisible = true;
+				heroRaf = requestAnimationFrame(animateHero);
+			}
+			window.addEventListener("resize", resizeHero, { passive: true });
+
+			// Sweet Catch: only scoops spawn; its RAF is stopped as soon as play ends.
+			const gameCanvas = document.querySelector(".game-canvas");
+			const gameCtx = gameCanvas.getContext("2d", { alpha: true });
+			const gameShell = document.querySelector(".game-shell");
+			const gameOverlay = document.querySelector(".game-overlay");
+			const gameCount = document.querySelector(".game-count");
+			const progressBar = document.querySelector(".game-progress span");
+			const game = { width: 0, height: 0, dpr: 1, playerX: 0, targetX: 0, scoops: [], caught: 0, running: false, raf: 0, last: 0, spawn: 0, spawnEvery: 1.05 };
+			const SCOOP_LIMIT = 12;
+			function resizeGame() {
+				const box = gameCanvas.getBoundingClientRect();
+				game.dpr = Math.min(devicePixelRatio || 1, 1.5); game.width = box.width; game.height = box.height;
+				gameCanvas.width = Math.round(box.width * game.dpr); gameCanvas.height = Math.round(box.height * game.dpr);
+				gameCtx.setTransform(game.dpr, 0, 0, game.dpr, 0, 0);
+				if (!game.playerX) game.playerX = game.targetX = game.width / 2;
+				game.playerX = Math.max(35, Math.min(game.width - 35, game.playerX)); game.targetX = Math.max(35, Math.min(game.width - 35, game.targetX));
+			}
+			function gamePointer(event) {
+				const box = gameCanvas.getBoundingClientRect();
+				game.targetX = Math.max(34, Math.min(game.width - 34, event.clientX - box.left));
+			}
+			gameCanvas.addEventListener("pointermove", gamePointer, { passive: true });
+			gameCanvas.addEventListener("pointerdown", gamePointer, { passive: true });
+			function drawCone(ctx, x, y, scale = 1) {
+				ctx.save(); ctx.translate(x, y); ctx.scale(scale, scale);
+				ctx.shadowColor = "rgba(255,134,183,.7)"; ctx.shadowBlur = 18;
+				ctx.beginPath(); ctx.arc(0, -16, 19, Math.PI, 0); ctx.lineTo(0, 42); ctx.closePath();
+				const coneGradient = ctx.createLinearGradient(-18, 0, 18, 0); coneGradient.addColorStop(0, "#bd805e"); coneGradient.addColorStop(.48, "#ffda9d"); coneGradient.addColorStop(1, "#cf8b62");
+				ctx.fillStyle = coneGradient; ctx.fill(); ctx.shadowBlur = 0;
+				ctx.save(); ctx.clip(); ctx.strokeStyle = "rgba(112,61,52,.46)"; ctx.lineWidth = 1.5;
+				for (let line = -28; line < 30; line += 11) { ctx.beginPath(); ctx.moveTo(line, -3); ctx.lineTo(line + 48, 45); ctx.moveTo(line + 48, -3); ctx.lineTo(line, 45); ctx.stroke(); }
+				ctx.restore();
+				const scoop = ctx.createRadialGradient(-6, -25, 2, 0, -20, 20); scoop.addColorStop(0, "#fff2fb"); scoop.addColorStop(.4, "#ffa5cd"); scoop.addColorStop(1, "#e84f99");
+				ctx.beginPath(); ctx.arc(0, -19, 19, Math.PI, 0); ctx.bezierCurveTo(16, -4, 6, -9, 0, -7); ctx.bezierCurveTo(-7, -5, -17, -7, -19, -19); ctx.fillStyle = scoop; ctx.shadowColor = "#ff7fb7"; ctx.shadowBlur = 18; ctx.fill(); ctx.restore();
+			}
+			function drawFallingScoop(scoop) {
+				gameCtx.save(); gameCtx.translate(scoop.x, scoop.y); gameCtx.beginPath(); gameCtx.arc(0, 0, scoop.radius, 0, Math.PI * 2);
+				const gradient = gameCtx.createRadialGradient(-scoop.radius * .35, -scoop.radius * .4, 1, 0, 0, scoop.radius * 1.2);
+				gradient.addColorStop(0, "#fff0f8"); gradient.addColorStop(.42, "#ff9ec8"); gradient.addColorStop(1, "#ea4f98");
+				gameCtx.fillStyle = gradient; gameCtx.shadowColor = "#ff66a8"; gameCtx.shadowBlur = 17; gameCtx.fill(); gameCtx.restore();
+			}
+			function spawnScoop() {
+				if (game.scoops.length >= SCOOP_LIMIT) return;
+				game.scoops.push({ x: random(22, Math.max(23, game.width - 22)), y: -20, radius: random(9, 13), speed: random(85, 125), sway: random(5, 18), phase: random(0, 7) });
+			}
+			function finishGame() {
+				game.running = false; cancelAnimationFrame(game.raf); game.scoops.length = 0;
+				gameOverlay.classList.add("is-hidden");
+				document.querySelector(".finale").classList.remove("is-locked");
+				document.querySelector(".finale-lock").classList.add("is-hidden");
+				document.querySelector(".wish-button").disabled = false;
+				startTypewriter();
+				window.setTimeout(() => document.querySelector("#finale").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }), 700);
+			}
+			function animateGame(time) {
+				if (!game.running) return;
+				const dt = Math.min((time - game.last) / 1000 || .016, .033); game.last = time;
+				game.spawn += dt;
+				if (game.spawn >= game.spawnEvery) { game.spawn = 0; spawnScoop(); }
+				gameCtx.clearRect(0, 0, game.width, game.height);
+				game.playerX += (game.targetX - game.playerX) * Math.min(1, dt * 14);
+				const playerY = game.height - 53;
+				for (let i = game.scoops.length - 1; i >= 0; i -= 1) {
+					const scoop = game.scoops[i]; scoop.phase += dt; scoop.y += scoop.speed * dt; scoop.x += Math.sin(scoop.phase * 2) * scoop.sway * dt;
+					if (scoop.y + scoop.radius >= playerY - 27 && scoop.y - scoop.radius <= playerY + 8 && Math.abs(scoop.x - game.playerX) < 34) {
+						game.scoops.splice(i, 1); game.caught += 1; gameCount.textContent = `${game.caught} / 5`; progressBar.style.width = `${game.caught * 20}%`;
+						if (game.caught >= 5) { finishGame(); return; }
+						continue;
+					}
+					if (scoop.y > game.height + scoop.radius) { game.scoops.splice(i, 1); continue; }
+					drawFallingScoop(scoop);
+				}
+				drawCone(gameCtx, game.playerX, playerY, 1);
+				game.raf = requestAnimationFrame(animateGame);
+			}
+			function startGame() {
+				if (game.running || game.caught >= 5) return;
+				resizeGame(); game.running = true; game.last = performance.now(); gameOverlay.classList.add("is-hidden");
+				game.raf = requestAnimationFrame(animateGame);
+			}
+			document.querySelector(".start-game").addEventListener("click", startGame);
+			if ("ResizeObserver" in window) new ResizeObserver(resizeGame).observe(gameShell); else window.addEventListener("resize", resizeGame);
+			resizeGame();
+
+			// The finale's canvas sleeps until a wish is made and discards faded sparks immediately.
+			const finaleCanvas = document.querySelector(".finale-canvas");
+			const finaleCtx = finaleCanvas.getContext("2d", { alpha: true });
+			const fireworks = { width: 0, height: 0, dpr: 1, particles: [], raf: 0, running: false, last: 0 };
+			const FIREWORK_LIMIT = 600;
+			function resizeFinale() {
+				const box = finaleCanvas.getBoundingClientRect(); fireworks.dpr = Math.min(devicePixelRatio || 1, 1.5);
+				fireworks.width = box.width; fireworks.height = box.height;
+				finaleCanvas.width = Math.round(box.width * fireworks.dpr); finaleCanvas.height = Math.round(box.height * fireworks.dpr);
+				finaleCtx.setTransform(fireworks.dpr, 0, 0, fireworks.dpr, 0, 0);
+			}
+			function launchBurst(x, y, count = 95) {
+				const palette = ["#ff75ae", "#ffb4d3", "#8cecff", "#d3fbff"];
+				const allowed = Math.min(count, FIREWORK_LIMIT - fireworks.particles.length);
+				for (let i = 0; i < allowed; i += 1) {
+					const angle = (Math.PI * 2 * i) / allowed + random(-.025, .025);
+					const speed = random(55, 205); const color = palette[(Math.random() * palette.length) | 0];
+					fireworks.particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, gravity: random(35, 72), drag: .985, life: 1, decay: random(.38, .66), size: random(1, 2.4), color });
+				}
+			}
+			function animateFireworks(time) {
+				if (!fireworks.running) return;
+				const dt = Math.min((time - fireworks.last) / 1000 || .016, .033); fireworks.last = time;
+				finaleCtx.clearRect(0, 0, fireworks.width, fireworks.height);
+				for (let i = fireworks.particles.length - 1; i >= 0; i -= 1) {
+					const particle = fireworks.particles[i]; particle.life -= particle.decay * dt;
+					if (particle.life <= 0) { fireworks.particles.splice(i, 1); continue; }
+					particle.vx *= particle.drag; particle.vy = particle.vy * particle.drag + particle.gravity * dt;
+					particle.x += particle.vx * dt; particle.y += particle.vy * dt;
+					finaleCtx.globalAlpha = particle.life; finaleCtx.fillStyle = particle.color;
+					finaleCtx.beginPath(); finaleCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2); finaleCtx.fill();
+				}
+				finaleCtx.globalAlpha = 1;
+				if (fireworks.particles.length) fireworks.raf = requestAnimationFrame(animateFireworks);
+				else { fireworks.running = false; fireworks.raf = 0; finaleCtx.clearRect(0, 0, fireworks.width, fireworks.height); }
+			}
+			function makeWish() {
+				if (document.querySelector(".wish-button").disabled) return;
+				cancelAnimationFrame(fireworks.raf);
+				fireworks.raf = 0;
+				resizeFinale(); fireworks.particles.length = 0; fireworks.running = true; fireworks.last = performance.now();
+				const bursts = [[.23,.31],[.76,.26],[.5,.19],[.35,.48],[.67,.43],[.5,.62]];
+				launchBurst(fireworks.width * bursts[0][0], fireworks.height * bursts[0][1], 94);
+				bursts.slice(1).forEach(([x,y], index) => window.setTimeout(() => launchBurst(fireworks.width * x, fireworks.height * y, 72), (index + 1) * 230));
+				fireworks.raf = requestAnimationFrame(animateFireworks);
+			}
+			document.querySelector(".wish-button").addEventListener("click", makeWish);
+			window.addEventListener("resize", resizeFinale, { passive: true }); resizeFinale();
+			window.addEventListener("pointerdown", (event) => {
+				if (!document.querySelector(".finale").contains(event.target) || document.querySelector(".wish-button").disabled) return;
+				const rect = finaleCanvas.getBoundingClientRect();
+				if (event.target !== document.querySelector(".wish-button")) {
+					if (!fireworks.running) { fireworks.running = true; fireworks.last = performance.now(); }
+					launchBurst(event.clientX - rect.left, event.clientY - rect.top, 42);
+					if (!fireworks.raf) fireworks.raf = requestAnimationFrame(animateFireworks);
+				}
+			}, { passive: true });
+
+			let typingStarted = false;
+			function startTypewriter() {
+				if (typingStarted) return; typingStarted = true;
+				const target = document.querySelector(".typed-title");
+				const parts = [{ text: "Happy birthday,", emphasis: false }, { text: "you.", emphasis: true }];
+				let partIndex = 0, charIndex = 0;
+				function typeNext() {
+					if (partIndex >= parts.length) { document.querySelector(".typing-cursor").style.display = "none"; return; }
+					const part = parts[partIndex];
+					  if (charIndex === 0 && part.emphasis) { target.appendChild(document.createElement("br")); const em = document.createElement("em"); em.className = "typed-emphasis"; target.appendChild(em); }
+					const destination = part.emphasis ? target.querySelector(".typed-emphasis") : target;
+					destination.append(document.createTextNode(part.text[charIndex])); charIndex += 1;
+					if (charIndex >= part.text.length) { partIndex += 1; charIndex = 0; }
+					window.setTimeout(typeNext, reducedMotion ? 1 : 92);
+				}
+				typeNext();
+			}
+		})();
+		});
+	</script>
+</body>
+</html>
